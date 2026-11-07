@@ -1,0 +1,522 @@
+pruebas de torregt
+
+al compilar para iniciar el programa:
+    mkdir -p bin
+    javac -d bin src/*.java
+    java -cp bin Principal
+
+cuando inicie el programa:
+opciones del menú
+1. registrar oficina
+2. registrar dispositivo
+3. encender dispositivo
+4. apagar dispositivo
+5. ajustar nivel
+6. registrar lectura
+7. registrar movimiento de cámara
+8. avanzar una hora
+9. atender alerta más urgente
+10. mostrar reportes
+11. salir
+
+al elegir la opción 10, escribe el código de oficina cuando te lo solicite.
+
+
+prueba 1. registrar oficina y dispositivos
+
+al registrar una oficina:
+    1
+    of1
+    usuario1
+
+resultado: Oficina registrada.
+
+al registrar una luminaria de 100 w:
+    2
+    of1
+    l1
+    100
+    1
+
+resultado: Dispositivo registrado.
+
+al registrar un climatizador de 1500 w:
+    2
+    of1
+    c1
+    1500
+    2
+
+resultado: Dispositivo registrado.
+
+al registrar un climatizador inverter de 1500 w:
+    2
+    of1
+    ci1
+    1500
+    3
+
+resultado: Dispositivo registrado.
+
+al registrar un sensor de humo de 10 w:
+    2
+    of1
+    s1
+    10
+    4
+
+resultado: Dispositivo registrado.
+
+al registrar una cámara de 100 w:
+    2
+    of1
+    cam1
+    100
+    5
+
+resultado: Dispositivo registrado.
+
+al consultar el reporte:
+    10
+    of1
+
+resultado: aparecen c1, cam1, ci1, l1 y s1. c1, cam1, ci1 y l1 están apagados
+y s1 está encendido. El nivel inicial de l1 es 100% y el de c1 y ci1 es 50%.
+El consumo diario de todos empieza en 0.0 kwh.
+
+
+prueba 2. códigos repetidos y datos inválidos
+
+en la misma sesión de la prueba 1.
+
+al registrar otra oficina con el código of1:
+    1
+    of1
+    usuario2
+
+resultado: No se registró. El código ya existe.
+
+al registrar otra luminaria con el código l1:
+    2
+    of1
+    l1
+    100
+    1
+
+resultado: No se registró. Revisa el código y la potencia.
+
+al registrar una luminaria con potencia negativa:
+    2
+    of1
+    x1
+    -5
+    1
+
+resultado: No se registró. Revisa el código y la potencia.
+
+al registrar un dispositivo en una oficina que no existe:
+    2
+    noexiste
+    x2
+    100
+    1
+
+resultado: No existe esa oficina.
+
+
+prueba 3. rechazar operaciones sin cambiar los datos
+
+al consultar los estados y consumos:
+    10
+    of1
+
+resultado: l1, c1, ci1 y cam1 aparecen apagados y s1 encendido. Los consumos
+están en cero.
+
+al ajustar l1 mientras está apagada:
+    5
+    l1
+    50
+
+resultado: No se pudo ajustar. Verifica que esté encendido y el nivel sea válido.
+
+al registrar una lectura de c1 mientras está apagado:
+    6
+    c1
+    35
+
+resultado: Lectura rechazada. Revisa el código, el estado y el rango.
+
+al registrar movimiento con cam1 apagada:
+    7
+    cam1
+
+resultado: Movimiento rechazado. Verifica que sea una cámara encendida.
+
+al intentar apagar s1:
+    4
+    s1
+
+resultado: No se pudo apagar. Revisa el código y el tipo de dispositivo.
+
+al volver a consultar el reporte:
+    10
+    of1
+
+resultado: l1, c1 y cam1 siguen apagados y s1 sigue encendido. Los consumos
+siguen en cero, sin alertas nuevas ni créditos.
+
+
+prueba 4. niveles válidos e inválidos
+
+al encender l1:
+    3
+    l1
+
+resultado: Dispositivo encendido.
+
+al encender c1:
+    3
+    c1
+
+resultado: Dispositivo encendido.
+
+al encender ci1:
+    3
+    ci1
+
+resultado: Dispositivo encendido.
+
+al probar el nivel 9 en l1:
+    5
+    l1
+    9
+
+resultado: No se pudo ajustar. Verifica que esté encendido y el nivel sea válido.
+El mínimo de l1 es 10.
+
+al probar un nivel válido en l1:
+    5
+    l1
+    50
+
+resultado: Nivel ajustado.
+
+al probar el nivel 19 en c1:
+    5
+    c1
+    19
+
+resultado: No se pudo ajustar. Verifica que esté encendido y el nivel sea válido.
+El mínimo de c1 es 20.
+
+al probar un nivel válido en c1:
+    5
+    c1
+    60
+
+resultado: Nivel ajustado.
+
+al probar el nivel 9 en ci1:
+    5
+    ci1
+    9
+
+resultado: No se pudo ajustar. Verifica que esté encendido y el nivel sea válido.
+El mínimo de ci1 es 10.
+
+al probar un nivel válido en ci1:
+    5
+    ci1
+    60
+
+resultado: Nivel ajustado.
+
+al ajustar cam1, que no es regulable:
+    5
+    cam1
+    50
+
+resultado: No se pudo ajustar. Verifica que esté encendido y el nivel sea válido.
+
+al consultar el reporte:
+    10
+    of1
+
+resultado: l1 tiene nivel 50% y c1 y ci1 tienen nivel 60%.
+
+
+prueba 5. consumo durante una hora
+
+al encender cam1:
+    3
+    cam1
+
+resultado: Dispositivo encendido. s1 ya estaba encendido. l1 está en nivel 50%
+y c1 y ci1 en nivel 60%.
+
+al avanzar una hora:
+    8
+
+resultado: Se avanzó una hora.
+
+al consultar el reporte:
+    10
+    of1
+
+resultado: los consumos diarios son aproximadamente:
+    l1: 0.05 kwh
+    c1: 1.08 kwh
+    ci1: 0.864 kwh
+    s1: 0.01 kwh
+    cam1: 0.1 kwh
+
+
+prueba 6. lecturas, umbrales y orden de alertas
+
+en la misma sesión, con c1 y s1 encendidos.
+
+al registrar una temperatura fuera del rango:
+    6
+    c1
+    61
+
+resultado: Lectura rechazada. Revisa el código, el estado y el rango. No se crea
+ninguna alerta.
+
+al registrar una lectura válida sin alerta:
+    6
+    c1
+    27
+
+resultado: Lectura registrada. No se crea ninguna alerta.
+
+al probar los umbrales de temperatura, una operación a la vez:
+    6
+    c1
+    28
+
+resultado: Lectura registrada. Se genera una alerta baja.
+
+    6
+    c1
+    32
+
+resultado: Lectura registrada. Se genera una alerta alta.
+
+    6
+    c1
+    40
+
+resultado: Lectura registrada. Se genera una alerta crítica.
+
+al registrar humo fuera del rango:
+    6
+    s1
+    1001
+
+resultado: Lectura rechazada. Revisa el código, el estado y el rango. No se crea
+ninguna alerta.
+
+al registrar humo válido sin alerta:
+    6
+    s1
+    149
+
+resultado: Lectura registrada. No se crea ninguna alerta.
+
+al probar los umbrales de humo:
+    6
+    s1
+    150
+
+resultado: Lectura registrada. Se genera una alerta alta.
+
+    6
+    s1
+    300
+
+resultado: Lectura registrada. Se genera una alerta crítica.
+
+al registrar movimiento con cam1 (la hora actual es 1, antes de las 7:00):
+    7
+    cam1
+
+resultado: Movimiento registrado. Se genera una alerta alta.
+
+al consultar el reporte:
+    10
+    of1
+
+resultado: la bandeja ordena primero las alertas críticas, luego las altas y
+finalmente la baja. Entre alertas de igual severidad aparece primero la que se
+generó antes. Cada lectura que alcanzó un umbral creó una alerta nueva.
+
+
+prueba 7. horario de la cámara
+
+en una sesión nueva, al registrar la oficina y la cámara:
+    1
+    of1
+    usuario1
+
+    2
+    of1
+    cam1
+    100
+    5
+
+resultado: Oficina registrada. Dispositivo registrado.
+
+al encender cam1 (la hora empieza en 0):
+    3
+    cam1
+
+resultado: Dispositivo encendido.
+
+a la hora 0, al registrar movimiento:
+    7
+    cam1
+
+resultado: Movimiento registrado. Se genera una alerta alta (antes de las 7:00).
+
+al avanzar siete horas con la opción 8 (siete veces) y registrar movimiento en
+la hora 7:
+    7
+    cam1
+
+resultado: Movimiento registrado. No se genera alerta nueva.
+
+al avanzar once horas hasta la hora 18 y registrar movimiento:
+    7
+    cam1
+
+resultado: Movimiento registrado. No se genera alerta.
+
+al avanzar una hora hasta la hora 19 y registrar movimiento:
+    7
+    cam1
+
+resultado: Movimiento registrado. Se genera una alerta alta.
+
+al consultar la bandeja:
+    10
+    of1
+
+resultado: aparecen alertas para las horas 0 y 19, y no para las horas 7 y 18.
+
+
+prueba 8. atender tarde una alerta y aplicar crédito
+
+en una sesión nueva, al registrar la oficina y el climatizador:
+    1
+    of1
+    usuario1
+
+    2
+    of1
+    c1
+    1500
+    2
+
+resultado: Oficina registrada. Dispositivo registrado.
+
+al encender c1:
+    3
+    c1
+
+resultado: Dispositivo encendido.
+
+al avanzar diez horas con la opción 8 (diez veces) y registrar una lectura de
+35 °C en la hora 10:
+    6
+    c1
+    35
+
+resultado: Lectura registrada. Se genera una alerta alta.
+
+al avanzar siete horas más con la opción 8 (siete veces) y atender la alerta:
+    9
+
+resultado: la alerta aparece como atendida, con 3 horas de retraso y un
+crédito de Q6.00. Se generó a la hora 10, se atendió a la hora 17 y su plazo
+era de 4 horas.
+
+
+prueba 9. franjas, factura y reinicio del día
+
+en una sesión nueva, al registrar la oficina y la luminaria:
+    1
+    of1
+    usuario1
+
+    2
+    of1
+    l1
+    1000
+    1
+
+resultado: Oficina registrada. Dispositivo registrado.
+
+al encender l1 (su nivel inicial es 100%):
+    3
+    l1
+
+resultado: Dispositivo encendido.
+
+al avanzar 24 horas con la opción 8 (veinticuatro veces) y consultar los
+reportes:
+    10
+    of1
+
+resultado: la factura muestra aproximadamente estos valores:
+    valle: 8 kwh, Q6.80
+    normal: 12 kwh, Q16.80
+    punta: 4 kwh, Q8.40
+    total: Q32.00
+El consumo diario de l1 vuelve a cero después de generar la factura.
+
+
+prueba opcional. comprobar que el crédito no se traslada
+
+en una sesión nueva, al registrar la oficina y un sensor de 1 w:
+    1
+    of1
+    usuario1
+
+    2
+    of1
+    s1
+    1
+    4
+
+resultado: Oficina registrada. Dispositivo registrado. El sensor inicia encendido.
+
+a la hora 0, al registrar humo de 300 ppm:
+    6
+    s1
+    300
+
+resultado: Lectura registrada. Se genera una alerta crítica.
+
+al avanzar tres horas con la opción 8 y atender la alerta con la opción 9:
+    8
+    8
+    8
+    9
+
+resultado: la alerta aparece como atendida con un crédito de Q10.00 (pasaron
+tres horas y el plazo era de una hora).
+
+al avanzar 21 horas más para cerrar el día y consultar los reportes:
+    10
+    of1
+
+resultado: el crédito supera el costo del consumo, así que el total de la
+factura es Q0.00.
+
+al avanzar 24 horas más y revisar la factura del segundo día:
+    10
+    of1
+
+resultado: la factura no incluye el crédito del día anterior. 
